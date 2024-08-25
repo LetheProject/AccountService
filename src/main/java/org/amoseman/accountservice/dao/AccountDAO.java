@@ -1,5 +1,6 @@
 package org.amoseman.accountservice.dao;
 
+import com.google.common.collect.ImmutableList;
 import org.amoseman.accountservice.dao.exception.UsernameAlreadyInUseException;
 import org.amoseman.accountservice.dao.exception.UserDoesNotExistException;
 import org.amoseman.accountservice.pojo.AccountCreationRequest;
@@ -10,11 +11,31 @@ import org.amoseman.accountservice.pojo.AccountDetails;
  */
 public interface AccountDAO {
     /**
-     * Create a new account.
+     * Request the creation of a new account.
      * @param request the request.
      * @throws UsernameAlreadyInUseException if the username is already in use.
      */
-    void create(AccountCreationRequest request) throws UsernameAlreadyInUseException;
+    void request(AccountCreationRequest request) throws UsernameAlreadyInUseException;
+
+    /**
+     * Accept an account creation request.
+     * @param username the username of the account.
+     * @throws UserDoesNotExistException if no request with the corresponding username exists.
+     */
+    void accept(String username) throws UserDoesNotExistException;
+
+    /**
+     * Reject an account creation request.
+     * @param username the username of the account.
+     * @throws UserDoesNotExistException if no request with the corresponding username exists.
+     */
+    void reject(String username) throws UserDoesNotExistException;
+
+    /**
+     * List the pending account creation requests.
+     * @return the pending account creation requests.
+     */
+    ImmutableList<String> listRequests();
 
     /**
      * Delete an account.
@@ -45,5 +66,4 @@ public interface AccountDAO {
      * @throws UserDoesNotExistException if the account does not exist.
      */
     String password(String username) throws UserDoesNotExistException;
-
 }
