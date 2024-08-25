@@ -1,7 +1,7 @@
 package org.amoseman.accountservice.dao;
 
 import org.amoseman.accountservice.dao.exception.UsernameAlreadyInUseException;
-import org.amoseman.accountservice.dao.exception.UsernameDoesNotExistException;
+import org.amoseman.accountservice.dao.exception.UserDoesNotExistException;
 import org.amoseman.accountservice.pojo.AccountCreationRequest;
 import org.amoseman.accountservice.pojo.AccountDetails;
 
@@ -19,31 +19,31 @@ public interface AccountDAO {
     /**
      * Delete an account.
      * @param username the username of the account.
-     * @throws UsernameDoesNotExistException if the account does not exist.
+     * @throws UserDoesNotExistException if the account does not exist.
      */
-    void delete(String username) throws UsernameDoesNotExistException;
+    void delete(String username) throws UserDoesNotExistException;
 
     /**
      * Update the account details.
      * @param details the updated details.
-     * @throws UsernameDoesNotExistException if the account does not exist.
+     * @throws UserDoesNotExistException if the account does not exist.
      */
-    void update(AccountDetails details) throws UsernameDoesNotExistException;
+    void update(AccountDetails details) throws UserDoesNotExistException;
 
     /**
      * Retrieve the account details.
      * @param username the username of the account.
      * @return the details of the account.
-     * @throws UsernameDoesNotExistException if the account does not exist.
+     * @throws UserDoesNotExistException if the account does not exist.
      */
-    AccountDetails details(String username) throws UsernameDoesNotExistException;
+    AccountDetails details(String username) throws UserDoesNotExistException;
 
     /**
      * Retrieve the password hash of an account.
      * @param username the username of the account.
      * @return the password hash in base 64.
-     * @throws UsernameDoesNotExistException if the account does not exist.
+     * @throws UserDoesNotExistException if the account does not exist.
      */
-    String password(String username) throws UsernameDoesNotExistException;
+    String password(String username) throws UserDoesNotExistException;
 
 }
