@@ -1,12 +1,12 @@
 package org.amoseman.accountservice.pojo;
 
-public class Account {
+public class AccountDetails {
     private final String username;
     private final String displayName;
     private final String pronouns;
     private final String description;
 
-    public Account(String username, String displayName, String pronouns, String description) {
+    public AccountDetails(String username, String displayName, String pronouns, String description) {
         this.username = username;
         this.displayName = displayName;
         this.pronouns = pronouns;
