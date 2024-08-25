@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.amoseman'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // https://mvnrepository.com/artifact/io.dropwizard/dropwizard-core
+    implementation 'io.dropwizard:dropwizard-core:5.0.0-alpha.1'
+    // https://mvnrepository.com/artifact/io.dropwizard/dropwizard-auth
+    implementation 'io.dropwizard:dropwizard-auth:5.0.0-alpha.1'
+    // https://mvnrepository.com/artifact/io.dropwizard.metrics/metrics-core
+    implementation 'io.dropwizard.metrics:metrics-core:4.2.27'
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation 'com.google.guava:guava:33.2.1-jre'
+    // https://mvnrepository.com/artifact/org.jooq/jooq
+    implementation 'org.jooq:jooq:3.19.10'
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation 'org.xerial:sqlite-jdbc:3.46.0.1'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+}
+
+test {
+    useJUnitPlatform()
+}
