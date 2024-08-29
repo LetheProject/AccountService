@@ -37,6 +37,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
     implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+
+    implementation 'org.mongodb:mongodb-driver-sync:5.0.1'
 }
 
 test {
