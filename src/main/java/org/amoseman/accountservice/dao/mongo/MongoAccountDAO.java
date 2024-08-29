@@ -14,6 +14,7 @@ import org.amoseman.accountservice.pojo.AccountDetails;
 import org.bson.Document;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -53,6 +54,7 @@ public class MongoAccountDAO implements AccountDAO {
                                 .append("display-name", document.get("username"))
                                 .append("pronouns", "n/a")
                                 .append("description", "This user has yet to write a description.")
+                                .append("roles", new HashMap<String, String>())
                 );
     }
 

@@ -9,6 +9,13 @@ import org.amoseman.accountservice.pojo.ServiceDetails;
  */
 public interface ServiceDAO {
     /**
+     * Determine if a service is registered.
+     * @param id the ID of the service.
+     * @return true if it is registered, false otherwise.
+     */
+    boolean isRegistered(String id);
+
+    /**
      * Register a service.
      * @param id the ID of the service.
      * @throws ServiceIsAlreadyRegisteredException if the service is already registered.

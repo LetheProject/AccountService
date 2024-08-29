@@ -20,6 +20,15 @@ public class ServiceDetails {
         this.roles = ImmutableList.copyOf(document.getList("roles", Role.class));
     }
 
+    public boolean containsRole(String roleName) {
+        for (Role role : roles) {
+            if (role.getName().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getID() {
         return id;
     }

@@ -23,6 +23,11 @@ public class MongoServiceDAO implements ServiceDAO {
     }
 
     @Override
+    public boolean isRegistered(String id) {
+        return null != connection.get().getCollection("services").find(eq("id", id)).first();
+    }
+
+    @Override
     public void register(String id) throws ServiceIsAlreadyRegisteredException {
         Document document = connection.get()
                 .getCollection("services")
