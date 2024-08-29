@@ -1,6 +1,7 @@
 package org.amoseman.accountservice.pojo;
 
 import com.google.common.collect.ImmutableList;
+import org.bson.Document;
 
 public class ServiceDetails {
     private final String id;
@@ -11,6 +12,12 @@ public class ServiceDetails {
         this.id = id;
         this.permissions = permissions;
         this.roles = roles;
+    }
+
+    public ServiceDetails(Document document) {
+        this.id = document.getString("id");
+        this.permissions = ImmutableList.copyOf(document.getList("permissions", String.class));
+        this.roles = ImmutableList.copyOf(document.getList("roles", Role.class));
     }
 
     public String getID() {
