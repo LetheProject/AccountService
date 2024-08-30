@@ -1,7 +1,6 @@
 package org.amoseman.accountservice.pojo;
 
 import com.google.common.collect.ImmutableList;
-import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;

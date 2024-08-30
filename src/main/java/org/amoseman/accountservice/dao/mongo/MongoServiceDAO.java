@@ -7,10 +7,10 @@ import org.amoseman.accountservice.dao.DatabaseConnection;
 import org.amoseman.accountservice.dao.ServiceDAO;
 import org.amoseman.accountservice.dao.exception.ServiceDoesNotExistException;
 import org.amoseman.accountservice.dao.exception.ServiceIsAlreadyRegisteredException;
+import org.amoseman.accountservice.pojo.Role;
 import org.amoseman.accountservice.pojo.ServiceDetails;
 import org.bson.Document;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -42,7 +42,7 @@ public class MongoServiceDAO implements ServiceDAO {
                         new Document()
                                 .append("id", id)
                                 .append("permissions", new ArrayList<String>())
-                                .append("roles", new ArrayList<String>())
+                                .append("roles", new Document())
                 );
     }
 
@@ -59,12 +59,25 @@ public class MongoServiceDAO implements ServiceDAO {
 
     @Override
     public void update(ServiceDetails details) throws ServiceDoesNotExistException {
+        Document service = connection.get()
+                .getCollection("services")
+                .find(eq("id", details.getID()))
+                .first();
+        if (null == service) {
+            throw new ServiceDoesNotExistException(details.getID());
+        }
+        Document roles = service.get("roles", Document.class);
+        roles.clear();
+        for (Role role : details.getRoles()) {
+            roles.append(role.getName(), role.getPermissions());
+        }
+
         long result = connection.get()
                 .getCollection("services")
                 .updateOne(
                         new Document().append("id", details.getID()),
                         Updates.combine(
-                                Updates.set("roles", details.getRoles()),
+                                Updates.set("roles", roles),
                                 Updates.set("permissions", details.getPermissions())
                         ),
                         new UpdateOptions().upsert(false)

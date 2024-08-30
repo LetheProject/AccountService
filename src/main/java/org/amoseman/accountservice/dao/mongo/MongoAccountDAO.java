@@ -14,7 +14,6 @@ import org.amoseman.accountservice.pojo.AccountDetails;
 import org.bson.Document;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
