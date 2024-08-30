@@ -6,14 +6,11 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import org.amoseman.accountservice.dao.DatabaseConnection;
 import org.amoseman.accountservice.dao.RoleDAO;
-import org.amoseman.accountservice.dao.exception.RoleDoesNotExistException;
-import org.amoseman.accountservice.dao.exception.ServiceDoesNotExistException;
 import org.amoseman.accountservice.dao.exception.UserDoesNotExistException;
 import org.amoseman.accountservice.dao.exception.UserDoesNotHaveRoleException;
-import org.amoseman.accountservice.pojo.AccountRoles;
-import org.amoseman.accountservice.pojo.Roles;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -25,7 +22,7 @@ public class MongoRoleDAO implements RoleDAO {
         this.connection = connection;
     }
 
-    private AccountRoles roles(String username) throws UserDoesNotExistException {
+    private Document roles(String username) throws UserDoesNotExistException {
         Document document = connection.get()
                 .getCollection("accounts")
                 .find(eq("username", username))
@@ -33,21 +30,26 @@ public class MongoRoleDAO implements RoleDAO {
         if (null == document) {
             throw new UserDoesNotExistException(username);
         }
-        return document.get("roles", AccountRoles.class);
+        return document.get("roles", Document.class);
     }
 
     @Override
     public void addRole(String username, String serviceID, String role) throws UserDoesNotExistException {
-        AccountRoles accountRoles = roles(username);
-        Roles roles = accountRoles.getRoles().get(serviceID);
-        roles = roles.add(role);
-        accountRoles.getRoles().put(serviceID, roles);
+        Document roles = roles(username);
+        List<String> rolesList = roles.getList(serviceID, String.class);
+        if (null == rolesList) {
+            rolesList = new ArrayList<>();
+        }
+        if (!rolesList.contains(role)) {
+            rolesList.add(role);
+        }
+        roles.put(serviceID, rolesList);
         long result = connection.get()
                 .getCollection("accounts")
                 .updateOne(
                         new Document().append("username", username),
                         Updates.combine(
-                                Updates.set("roles", accountRoles)
+                                Updates.set("roles", roles)
                         ),
                         new UpdateOptions().upsert(false)
                 ).getModifiedCount();
@@ -57,17 +59,22 @@ public class MongoRoleDAO implements RoleDAO {
     }
 
     @Override
-    public void removeRole(String username, String serviceID, String role) throws UserDoesNotExistException {
-        AccountRoles accountRoles = roles(username);
-        Roles roles = accountRoles.getRoles().get(serviceID);
-        roles = roles.remove(role);
-        accountRoles.getRoles().put(serviceID, roles);
+    public void removeRole(String username, String serviceID, String role) throws UserDoesNotExistException, UserDoesNotHaveRoleException {
+        Document roles = roles(username);
+        List<String> rolesList = roles.getList(serviceID, String.class);
+        if (null == rolesList) {
+            throw new UserDoesNotHaveRoleException(username, serviceID, role);
+        }
+        if (!rolesList.remove(role)) {
+            throw new UserDoesNotHaveRoleException(username, serviceID, role);
+        }
+        roles.put(serviceID, rolesList);
         long result = connection.get()
                 .getCollection("accounts")
                 .updateOne(
                         new Document().append("username", username),
                         Updates.combine(
-                                Updates.set("roles", accountRoles)
+                                Updates.set("roles", roles)
                         ),
                         new UpdateOptions().upsert(false)
                 ).getModifiedCount();
@@ -78,10 +85,10 @@ public class MongoRoleDAO implements RoleDAO {
 
     @Override
     public ImmutableList<String> getRoles(String username, String serviceID) throws UserDoesNotExistException {
-        Roles roles = roles(username).getRoles().get(serviceID);
+        List<String> roles = roles(username).getList(serviceID, String.class);
         if (null == roles) {
             return ImmutableList.of();
         }
-        return ImmutableList.copyOf(roles.getRoles());
+        return ImmutableList.copyOf(roles);
     }
 }

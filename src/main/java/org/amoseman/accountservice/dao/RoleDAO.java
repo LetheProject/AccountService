@@ -26,7 +26,7 @@ public interface RoleDAO {
      * @param role the role.
      * @throws UserDoesNotExistException if the user does not exist.
      */
-    void removeRole(String username, String serviceID, String role) throws UserDoesNotExistException;
+    void removeRole(String username, String serviceID, String role) throws UserDoesNotExistException, UserDoesNotHaveRoleException;
 
     /**
      * Retrieve the roles of a user in the domain of a service.

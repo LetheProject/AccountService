@@ -54,7 +54,7 @@ public class MongoAccountDAO implements AccountDAO {
                                 .append("display-name", document.get("username"))
                                 .append("pronouns", "n/a")
                                 .append("description", "This user has yet to write a description.")
-                                .append("roles", new HashMap<String, String>())
+                                .append("roles", new Document())
                 );
     }
 
